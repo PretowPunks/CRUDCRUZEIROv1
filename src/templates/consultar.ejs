@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de planos de aula</title>
+    <link rel="stylesheet" href="estilo.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>E.E. Bairro Cruzeiro</h1>
+    </header>
+    <section>
+        <div>
+            <h3>Consulta de plano de aula</h3>
+        </div>
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Professor</th>
+                        <th>Componente</th>
+                        <th>Turma</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="listaPlanos">
+                    <!-- Aqui será inserida a lista de planos -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <footer>
+        @BlackPanthera
+    </footer>
+
+    <script>
+        async function buscarPlanos() {
+            try {
+                const response = await fetch('/planos')
+                const data = await response.json()
+
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar planos')
+                }
+
+                const listaPlanos = document.getElementById('listaPlanos')
+                listaPlanos.innerHTML = '' // Limpa a lista antes de adicionar os novos planos
+
+                data.result.forEach(plano => {
+                    const trPlano = document.createElement('tr')
+                    trPlano.innerHTML = `
+                        <td>${plano.professor_nome}</td>
+                        <td>${plano.componente_nome}</td>
+                        <td>${plano.turma}</td>
+                        <td>
+                            <button onclick="verPlano(${plano.id_plano})">Ver Plano</button>
+                            <button onclick="excluirPlano(${plano.id_plano})">Excluir</button> 
+                        </td>`
+                    listaPlanos.appendChild(trPlano);
+                })
+
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao buscar planos. Por favor, tente novamente.')
+            }
+        }
+
+        function verPlano(idPlano) {
+            // Implemente a função para visualizar o plano com o ID específico
+            alert('Visualizar plano com ID: ' + idPlano)
+        }
+
+        async function excluirPlano(idPlano) {
+            try {
+                const confirmed = confirm('Tem certeza de que deseja excluir este plano?')
+                if (!confirmed) return;
+
+                const response = await fetch(`/excluirplano/${idPlano}`, {
+                method: 'DELETE'
+            })
+
+            if (!response.ok) {
+            throw new Error('Erro ao excluir plano')
+            }
+
+            // Remove a linha da tabela que corresponde ao plano excluído
+            const trPlano = document.getElementById(`plano-${idPlano}`)
+            if (trPlano) {
+            trPlano.remove();
+            }
+
+            alert('Plano excluído com sucesso!')
+            location.reload()
+            } catch (error) {
+                console.error('Erro:', error)
+                alert('Erro ao excluir plano. Por favor, tente novamente.')
+            }}
+
+        // Chama a função buscarPlanos() quando a página é carregada
+        window.onload = buscarPlanos;
+    </script>
+</body>
+</html>

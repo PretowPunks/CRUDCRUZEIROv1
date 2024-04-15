@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de plano de aula</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+    <header>
+        <h1>E.E. Bairro Cruzeiro</h1>
+    </header>
+    <section>
+        <div>
+            <h3>Cadastro de plano de aula</h3>
+        </div>
+        <div>
+            <form id="form">
+                Professor <input type="text" name="professor" id="professor"><br>
+                Área <input type="text" name="area" id="area"><br>
+                Componente <input type="text" name="componente" id="componente"><br>
+                Turma <input type="text" name="turma" id="turma"><br>
+                Objetivos <input type="text" name="objetivos" id="objetivos"><br>
+                Slides <input type="number" name="slides" id="slides"><br>
+                Tema <input type="text" name="tema" id="tema"><br>
+                Período <input type="date" name="periodo" id="periodo"><br>
+                Número de aulas <input type="number" name="n_aulas" id="n_aulas"><br>
+                Recursos <input type="text" name="recursos" id="recursos"><br>
+                Adequação <input type="text" name="adequacao" id="adequacao"><br>
+                <input type="button" value="Enviar" onclick="inserirPlano()">
+            </form>
+        </div>
+    </section>
+    <footer>
+        @BlackPanthera
+    </footer>
+    <script>
+            async function inserirPlano() {
+            const professor = document.getElementById('professor').value;
+            const area = document.getElementById('area').value;
+            const componente = document.getElementById('componente').value;
+            const turma = document.getElementById('turma').value;
+            const objetivos = document.getElementById('objetivos').value;
+            const slides = document.getElementById('slides').value;
+            const tema = document.getElementById('tema').value;
+            const periodo = document.getElementById('periodo').value;
+            const n_aulas = document.getElementById('n_aulas').value;
+            const recursos = document.getElementById('recursos').value;
+            const adequacao = document.getElementById('adequacao').value;
+        
+            if (!professor || !area || !componente || !turma || !objetivos || !slides || !tema || !periodo || !n_aulas || !recursos || !adequacao) {
+                    console.error('Todos os campos devem ser preenchidos.');
+                    return;
+            }
+
+            
+            const periodoString = periodo.toLocaleDateString('pt-BR'); // Converte para o formato DD/MM/YYYY
+
+
+            const data = {
+                professor: professor,
+                area: area,
+                componente: componente,
+                turma: turma,
+                objetivos: objetivos,
+                slides: slides,
+                tema: tema,
+                periodo: periodoString,
+                n_aulas: n_aulas,
+                recursos: recursos,
+                adequacao: adequacao
+            };
+
+            console.log('Dados a serem enviados:', data);
+            
+            try {
+                const response = await fetch('/plano', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro ao cadastrar plano');
+                }
+
+                alert('Plano cadastrado com sucesso!');
+                // Limpar os campos do formulário após o cadastro bem-sucedido
+                document.getElementById('form').reset();
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao cadastrar plano. Verifique os dados e tente novamente.');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de plano de aula</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+    <header>
+        <h1>E.E. Bairro Cruzeiro</h1>   
+    </header>
+    <section>
+        <div>
+            <h3>Cadastro de plano de aula</h3>
+        </div>
+        <div>
+            <input type="button" value="Cadastrar" onclick="redirecionarParaInserir()">
+            <input type="button" value="Consultar" onclick="redirecionarParaConsultar()">
+        </div>
+    </section>
+    <footer>
+        @BlackPanthera
+    </footer>
+    <script>
+        async function redirecionarParaInserir() {
+            try {
+                const response = await fetch('/inserir', {
+                    method: 'GET'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro ao redirecionar para inserir');
+                }
+
+                window.location.href = '/inserir'; // Redirecionar para a rota /inserir
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao redirecionar para inserir. Por favor, tente novamente.');
+            }
+        }
+
+        async function redirecionarParaConsultar() {
+            try {
+                const response = await fetch('/consultar', {
+                    method: 'GET'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro ao redirecionar para consultar');
+                }
+
+                window.location.href = '/consultar'; // Redirecionar para a rota /consultar
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao redirecionar para consultar. Por favor, tente novamente.');
+            }
+        }
+    </script>
+</body>
+</html>
